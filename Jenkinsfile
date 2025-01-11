@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.12'  // Используем официальный образ с Python
-            label 'linux'        // Если нужно, укажи лейбл для специфической машины (например, если ты используешь агенты Jenkins)
-        }
-    }
+    agent any  // Это использует любой доступный агент Jenkins
 
     stages {
         stage('Checkout') {
@@ -16,9 +11,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    echo "Installing dependencies"
-                    sh 'python -m venv venv'
-                    sh './venv/bin/pip install -r requirements.txt'
+                    docker.image('python:3.12').inside {
+                        sh 'python -m venv venv'
+                        sh './venv/bin/pip install -r requirements.txt'
+                    }
                 }
             }
         }
@@ -26,8 +22,9 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    echo "Running tests"
-                    sh './venv/bin/pytest test_app.py'
+                    docker.image('python:3.12').inside {
+                        sh './venv/bin/pytest test_app.py'
+                    }
                 }
             }
         }
