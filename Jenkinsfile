@@ -1,9 +1,5 @@
 pipeline {
-    agent any
-
-    environment {
-        DOCKER_HOST = "tcp://localhost:2375" // Указываем адрес Docker-сервера
-    }
+    agent any  // Это использует любой доступный агент Jenkins
 
     stages {
         stage('Checkout') {
@@ -15,9 +11,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    echo "Building Docker container and installing dependencies"
-                    // Запускаем контейнер с установкой зависимостей
-                    sh 'docker run --rm -v $(pwd):/app -w /app python:3.12 bash -c "python -m venv venv && ./venv/bin/pip install -r requirements.txt"'
+                    docker.image('python:3.12').inside {
+                        bat 'python -m venv venv'
+                        bat './venv/bin/pip install -r requirements.txt'
+                    }
                 }
             }
         }
@@ -25,8 +22,9 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    echo "Running tests"
-                    sh './venv/bin/pytest'
+                    docker.image('python:3.12').inside {
+                        bat './venv/bin/pytest'
+                    }
                 }
             }
         }
@@ -35,7 +33,6 @@ pipeline {
             steps {
                 script {
                     echo "Deploying the project"
-                    // Деплой
                 }
             }
         }
