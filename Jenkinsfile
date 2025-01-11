@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.12').inside {
-                        bat './venv/bin/pytest test_app.py'
+                        bat './venv/bin/pytest'
                     }
                 }
             }
