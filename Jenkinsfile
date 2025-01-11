@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
 
     stages {
@@ -13,7 +12,7 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.12').inside {
-                        sh 'pip install -r requirements.txt'
+                        bat 'pip install -r requirements.txt'
                     }
                 }
             }
@@ -23,7 +22,7 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.12').inside {
-                        sh 'pytest'
+                        bat 'pytest'
                     }
                 }
             }
