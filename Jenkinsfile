@@ -11,8 +11,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    docker.image('python:3.12').inside {
-                        bat 'pip install -r requirements.txt'
+                    docker.withServer('tcp://localhost:2375') {
+                        docker.image('python:3.12').inside {
+                            bat 'pip install -r requirements.txt'
+                        }
                     }
                 }
             }
@@ -21,8 +23,10 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    docker.image('python:3.12').inside {
-                        bat 'pytest'
+                    docker.withServer('tcp://localhost:2375') {
+                        docker.image('python:3.12').inside {
+                            bat 'pytest'
+                        }
                     }
                 }
             }
