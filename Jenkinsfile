@@ -1,10 +1,11 @@
 pipeline {
-    agent any  // Это использует любой доступный агент Jenkins
+
+    agent any
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/AdamSykle/python-project.git'
+                git branch: 'main', url: 'https://github.com/AdamSykle/python-project.git', credentialsId: 'jafar01-dockerhub'
             }
         }
 
@@ -12,8 +13,7 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.12').inside {
-                        sh 'python -m venv venv'
-                        sh './venv/bin/pip install -r requirements.txt'
+                        sh 'pip install -r requirements.txt'
                     }
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.12').inside {
-                        sh './venv/bin/pytest'
+                        sh 'pytest'
                     }
                 }
             }
@@ -31,9 +31,8 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                script {
-                    echo "Deploying the project"
-                }
+                echo "Deploying the project..."
+                // Здесь можно добавить команды для деплоя, если потребуется
             }
         }
     }
