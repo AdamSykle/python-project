@@ -1,15 +1,14 @@
 pipeline {
-    agent any
-
-    environment {
-        // Установка переменных окружения (например, версия Python)
-        PYTHON_VERSION = '3.12.2'
+    agent {
+        docker {
+            image 'python:3.12'  // Используем официальный образ с Python
+            label 'linux'        // Если нужно, укажи лейбл для специфической машины (например, если ты используешь агенты Jenkins)
+        }
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Получаем исходный код из репозитория
                 git 'https://github.com/AdamSykle/python-project.git'
             }
         }
@@ -17,7 +16,6 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Установка зависимостей с использованием pip
                     echo "Installing dependencies"
                     sh 'python -m venv venv'
                     sh './venv/bin/pip install -r requirements.txt'
@@ -28,9 +26,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Запуск тестов, например, с использованием pytest
                     echo "Running tests"
-                    bat '.\\venv\\Scripts\\pytest'
+                    sh './venv/bin/pytest test_app.py'
                 }
             }
         }
@@ -38,9 +35,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Деплой проекта (например, на сервер или в контейнер)
                     echo "Deploying the project"
-                    // Здесь может быть команда для деплоя
                 }
             }
         }
