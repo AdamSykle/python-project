@@ -12,8 +12,8 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.12').inside {
-                        sh 'python -m venv venv'
-                        sh './venv/bin/pip install -r requirements.txt'
+                        bat 'python -m venv venv'
+                        bat './venv/bin/pip install -r requirements.txt'
                     }
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.12').inside {
-                        sh './venv/bin/pytest test_app.py'
+                        bat './venv/bin/pytest test_app.py'
                     }
                 }
             }
