@@ -1,4 +1,4 @@
-pipeline {
+dpipeline {
     agent any
 
     stages {
@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     docker.withServer('tcp://localhost:2375') {
-                        docker.image('python:3.12').inside {
+                        docker.image('python:3.12.8').inside {
                             bat 'pip install -r requirements.txt'
                         }
                     }
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     docker.withServer('tcp://localhost:2375') {
-                        docker.image('python:3.12').inside {
+                        docker.image('python:3.12.8').inside {
                             bat 'pytest'
                         }
                     }
