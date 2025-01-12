@@ -4,7 +4,7 @@ dpipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/AdamSykle/python-project.git', credentialsId: 'github-credentials'
+                git branch: 'main', url: 'https://github.com/AdamSykle/python-project.git'
             }
         }
 
