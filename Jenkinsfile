@@ -1,51 +1,26 @@
-dpipeline {
+pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Setup') {
             steps {
-                git branch: 'main', url: 'https://github.com/AdamSykle/python-project.git'
+                echo 'Setting up environment...'
             }
         }
-
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
-                script {
-                    docker.withServer('tcp://localhost:2375') {
-                        docker.image('python:3.12.2').inside {
-                            bat 'pip install -r requirements.txt'
-                        }
-                    }
-                }
+                echo 'Building application...'
             }
         }
-
-        stage('Run Tests') {
+        stage('Test') {
             steps {
-                script {
-                    docker.withServer('tcp://localhost:2375') {
-                        docker.image('python:3.12.2').inside {
-                            bat 'pytest'
-                        }
-                    }
-                }
+                echo 'Running tests...'
             }
         }
-
         stage('Deploy') {
             steps {
-                echo "Deploying the project..."
-                // Здесь можно добавить команды для деплоя, если потребуется
+                echo 'Deploying application...'
             }
-        }
-    }
-
-    post {
-        success {
-            echo "Pipeline succeeded!"
-        }
-        failure {
-            echo "Pipeline failed!"
         }
     }
 }
