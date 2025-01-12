@@ -12,7 +12,7 @@ dpipeline {
             steps {
                 script {
                     docker.withServer('tcp://localhost:2375') {
-                        docker.image('python:3.12.8').inside {
+                        docker.image('python:3.12.2').inside {
                             bat 'pip install -r requirements.txt'
                         }
                     }
@@ -24,7 +24,7 @@ dpipeline {
             steps {
                 script {
                     docker.withServer('tcp://localhost:2375') {
-                        docker.image('python:3.12.8').inside {
+                        docker.image('python:3.12.2').inside {
                             bat 'pytest'
                         }
                     }
